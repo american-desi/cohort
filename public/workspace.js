@@ -30,6 +30,15 @@
     const tags = document.getElementById('ws-tags');
     tags.replaceChildren();
     for (const t of project.tags || []) tags.appendChild(el('span', 'tag', t));
+    const repoBox = document.getElementById('ws-repo');
+    repoBox.replaceChildren();
+    if (project.repo) {
+      const link = el('a', 'repo-link', project.repo.replace('https://github.com/', ''));
+      link.href = project.repo;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      repoBox.appendChild(link);
+    }
     document.getElementById('ws-upvote-count').textContent = String(project.upvotes);
   }
 

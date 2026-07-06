@@ -203,6 +203,56 @@ app.post('/api/projects', (req, res) => {
   res.status(201).json(publicProject(project));
 });
 
+// Adopt an open-source repo: creates a Cohort project linked to it, or
+// returns the existing one so contributors gather in a single workspace.
+app.post('/api/projects/adopt', (req, res) => {
+  const body = req.body || {};
+  const repo = cleanText(body.repo, 200);
+  const handle = cleanText(body.handle, MAX_HANDLE);
+  if (!repo || !/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/.test(repo)) {
+    return res.status(400).json({ error: 'repo must be a github.com/owner/name URL' });
+  }
+  if (!handle) return res.status(400).json({ error: 'handle is required' });
+
+  const existing = data.projects.find((p) => p.repo && p.repo.replace(/\/$/, '') === repo.replace(/\/$/, ''));
+  if (existing) return res.json({ ...publicProject(existing), existing: true });
+
+  const name = cleanText(body.name, MAX_NAME) || repo.split('/').pop();
+  const pitch = cleanText(body.pitch, MAX_PITCH) ||
+    `Contributor squad for ${repo.replace('https://github.com/', '')} — we pick good first issues, review each other's PRs and learn together.`;
+  const project = {
+    id: crypto.randomBytes(5).toString('hex'),
+    name,
+    pitch,
+    founder: handle,
+    tags: ['open source', 'contributors welcome'],
+    repo,
+    upvoters: [],
+    createdAt: Date.now(),
+    doc: [
+      `# ${name} — contributor squad`,
+      '',
+      `Repo: ${repo}`,
+      `Good first issues: ${repo}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`,
+      '',
+      '## How we work',
+      '1. Claim an issue below before starting (avoid duplicate work).',
+      '2. Fork the repo -> clone your fork -> branch -> fix -> pull request.',
+      '3. Post your PR link in chat for a squad review before requesting maintainer review.',
+      '',
+      '## Claimed issues',
+      '- (issue link) — @handle — status',
+      '',
+      '## Notes',
+      '',
+    ].join('\n'),
+    chat: [],
+  };
+  data.projects.unshift(project);
+  scheduleSave();
+  res.status(201).json(publicProject(project));
+});
+
 app.post('/api/projects/:id/upvote', (req, res) => {
   const project = findProject(req.params.id);
   if (!project) return res.status(404).json({ error: 'Project not found' });

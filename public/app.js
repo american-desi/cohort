@@ -196,7 +196,25 @@
         const meta = el('p', 'oss-meta', `★ ${r.stars.toLocaleString()}${r.language ? ` · ${r.language}` : ''}`);
         card.appendChild(meta);
         const actions = el('div', 'card-actions');
-        const issues = el('a', 'btn btn-primary btn-sm', 'Good first issues →');
+        const team = el('button', 'btn btn-primary btn-sm', 'Team up →');
+        team.title = 'Open a Cohort workspace for this repo — coordinate contributions with chat and @ai';
+        team.addEventListener('click', () => {
+          Cohort.ensureHandle(async (handle) => {
+            team.disabled = true;
+            try {
+              const resp = await fetch('/api/projects/adopt', {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ repo: r.url, name: r.name.split('/').pop(), pitch: '', handle }),
+              });
+              const body = await resp.json();
+              if (resp.ok) location.href = `/p/${encodeURIComponent(body.id)}`;
+              else team.disabled = false;
+            } catch { team.disabled = false; }
+          });
+        });
+        actions.appendChild(team);
+        const issues = el('a', 'btn btn-ghost btn-sm', 'Good first issues →');
         issues.href = r.issuesUrl;
         issues.target = '_blank';
         issues.rel = 'noopener noreferrer';
