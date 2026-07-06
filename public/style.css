@@ -645,3 +645,74 @@ a:hover { text-decoration: underline; }
   .ws-panel { min-height: 320px; }
   .ws-editor { min-height: 320px; }
 }
+
+/* --- Learn section ---------------------------------------------------- */
+.learn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 760px;
+}
+
+.learn-card {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  background: hsl(222, 15%, 15%);
+  border: 1px solid hsl(222, 10%, 24%);
+  border-radius: 10px;
+  padding: 20px 22px;
+}
+
+.learn-step {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: hsl(243, 80%, 66%);
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.learn-card h3 {
+  margin-bottom: 6px;
+}
+
+.learn-card p {
+  color: hsl(222, 10%, 70%);
+  line-height: 1.55;
+}
+
+.learn-card code {
+  background: hsl(222, 18%, 10%);
+  border: 1px solid hsl(222, 10%, 24%);
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 0.9em;
+}
+
+/* --- Open source / repo links ------------------------------------------ */
+.oss-meta {
+  color: hsl(45, 80%, 65%);
+  font-size: 13px;
+  margin: 6px 0 2px;
+}
+
+.repo-link {
+  display: inline-block;
+  font-size: 13px;
+  color: hsl(200, 70%, 65%);
+  text-decoration: none;
+  margin-top: 4px;
+}
+
+.repo-link::before {
+  content: "⌥ ";
+}
+
+.repo-link:hover {
+  text-decoration: underline;
+}

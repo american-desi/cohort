@@ -13,8 +13,10 @@
       <div class="nav-tabs">
         <button class="nav-tab" data-view="home">Home</button>
         <button class="nav-tab" data-view="projects">Projects</button>
+        <button class="nav-tab" data-view="opensource">Open Source</button>
         <button class="nav-tab" data-view="leaderboard">Leaderboard</button>
         <button class="nav-tab" data-view="news">News</button>
+        <button class="nav-tab" data-view="learn">Learn</button>
       </div>
       <div class="nav-spacer"></div>
       <button class="btn btn-ghost btn-sm" id="ai-settings-btn">⚙ AI Settings</button>
@@ -28,15 +30,16 @@
       <div class="hero">
         <span class="hero-badge">Open source · community driven</span>
         <h1>Cohort</h1>
-        <p class="tagline">Find your cohort. Build your company.</p>
+        <p class="tagline">Learn. Build. Ship — together.</p>
         <p class="subline">
-          The open-source, community-driven online Y Combinator: meet builders
-          around the world, start something together, and ship it with AI at
-          your side.
+          The open-source, community-driven home for builders: learn by doing,
+          contribute to real open-source projects, start your own, and grow it
+          into a business — with a global cohort and AI at your side.
         </p>
         <div class="hero-ctas">
           <button class="btn btn-primary" id="cta-start">Start a project</button>
           <button class="btn btn-ghost" id="cta-browse">Browse projects</button>
+          <button class="btn btn-ghost" id="cta-learn">How it works</button>
         </div>
       </div>
       <div class="feature-grid">
@@ -54,6 +57,14 @@
             Plug in your own AI key (Gemini, Groq, OpenRouter, Anthropic or any
             compatible API) and prompt it with your cofounders, right inside
             the team chat.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>🌱 Contribute to open source</h3>
+          <p>
+            A live board of real GitHub projects with good first issues —
+            pick one, make your first contribution, and build your track
+            record while you learn.
           </p>
         </div>
         <div class="feature-card">
@@ -89,6 +100,17 @@
       <div class="board" id="board"></div>
     </section>
 
+    <!-- Open Source -->
+    <section class="view" id="view-opensource">
+      <div class="view-head">
+        <div>
+          <h2>Open Source</h2>
+          <p class="view-sub">Real GitHub projects looking for contributors right now — every one has open “good first issues”.</p>
+        </div>
+      </div>
+      <div class="project-grid" id="oss-grid"></div>
+    </section>
+
     <!-- News -->
     <section class="view" id="view-news">
       <div class="view-head">
@@ -98,6 +120,60 @@
         </div>
       </div>
       <div class="news-list" id="news-list"></div>
+    </section>
+
+    <!-- Learn -->
+    <section class="view" id="view-learn">
+      <div class="view-head">
+        <div>
+          <h2>Learn</h2>
+          <p class="view-sub">How Cohort works, from first click to first company.</p>
+        </div>
+      </div>
+      <div class="learn-list">
+        <div class="learn-card">
+          <span class="learn-step">1</span>
+          <div>
+            <h3>Pick a handle</h3>
+            <p>No signup, no password — choose a handle and you're in. It identifies you in workspaces, chats and upvotes.</p>
+          </div>
+        </div>
+        <div class="learn-card">
+          <span class="learn-step">2</span>
+          <div>
+            <h3>Learn by contributing to open source</h3>
+            <p>Open the <strong>Open Source</strong> tab: every repo listed has beginner-friendly “good first issues”. Pick one that matches your interests, read its contributing guide, then: fork the repo on GitHub → clone your fork → create a branch → make the fix → open a pull request. One merged PR teaches you more than ten tutorials — and it's a public track record.</p>
+          </div>
+        </div>
+        <div class="learn-card">
+          <span class="learn-step">3</span>
+          <div>
+            <h3>Join or start a project</h3>
+            <p>Browse <strong>Projects</strong> to find teams looking for your skills, or start your own with a one-breath pitch and “looking for” tags. Link your GitHub repo so contributors can find the code.</p>
+          </div>
+        </div>
+        <div class="learn-card">
+          <span class="learn-step">4</span>
+          <div>
+            <h3>Build together in the workspace</h3>
+            <p>Every project has a live shared workspace: an editor everyone can type in and a team chat. Draft specs, sketch APIs, plan launches — everything syncs in real time.</p>
+          </div>
+        </div>
+        <div class="learn-card">
+          <span class="learn-step">5</span>
+          <div>
+            <h3>Bring your own AI</h3>
+            <p>Open <strong>⚙ AI Settings</strong>, pick a provider and paste an API key — Gemini, Groq and OpenRouter all have free tiers (no credit card). Then type <code>@ai</code> in any team chat: the whole team sees the question and the answer. Your key stays in your browser.</p>
+          </div>
+        </div>
+        <div class="learn-card">
+          <span class="learn-step">6</span>
+          <div>
+            <h3>Grow it into a business</h3>
+            <p>Ship something small, show it to ten real users, and iterate on what they say. Upvotes move you up the <strong>Leaderboard</strong> — visibility brings collaborators. The <strong>News</strong> tab keeps you current with what founders and hackers are talking about.</p>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -123,6 +199,10 @@
         <div class="field">
           <label for="pf-tags">Looking for (comma-separated)</label>
           <input id="pf-tags" placeholder="e.g. backend engineer, designer, growth" />
+        </div>
+        <div class="field">
+          <label for="pf-repo">GitHub repo (optional)</label>
+          <input id="pf-repo" maxlength="200" placeholder="https://github.com/you/your-project" />
         </div>
         <p class="form-error" id="pf-error"></p>
         <div class="modal-actions">

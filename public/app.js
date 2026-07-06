@@ -5,9 +5,10 @@
 
 (() => {
   const { el } = Cohort;
-  const VIEWS = ['home', 'projects', 'leaderboard', 'news'];
+  const VIEWS = ['home', 'projects', 'opensource', 'leaderboard', 'news', 'learn'];
   let projects = [];
   let newsLoaded = false;
+  let ossLoaded = false;
 
   // --- tab switching ------------------------------------------------------
   function currentView() {
@@ -27,6 +28,7 @@
     }
     if (name === 'projects' || name === 'leaderboard') loadProjects();
     if (name === 'news' && !newsLoaded) loadNews();
+    if (name === 'opensource' && !ossLoaded) loadOpenSource();
   }
 
   document.querySelectorAll('.nav-tab[data-view]').forEach((tab) => {
@@ -88,6 +90,14 @@
       card.appendChild(el('h3', null, p.name));
       card.appendChild(el('p', 'project-pitch', p.pitch));
       card.appendChild(el('p', 'project-founder', `founded by @${p.founder}`));
+
+      if (p.repo) {
+        const repo = el('a', 'repo-link', p.repo.replace('https://github.com/', ''));
+        repo.href = p.repo;
+        repo.target = '_blank';
+        repo.rel = 'noopener noreferrer';
+        card.appendChild(repo);
+      }
 
       if (p.tags && p.tags.length) {
         const row = el('div', 'tag-row');
@@ -169,6 +179,41 @@
     }
   }
 
+  // --- open source discovery ------------------------------------------------------
+  async function loadOpenSource() {
+    const grid = document.getElementById('oss-grid');
+    grid.replaceChildren(el('p', 'empty-note', 'Finding projects that want contributors…'));
+    try {
+      const res = await fetch('/api/opensource');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const repos = await res.json();
+      ossLoaded = true;
+      grid.replaceChildren();
+      for (const r of repos) {
+        const card = el('div', 'project-card');
+        card.appendChild(el('h3', null, r.name));
+        card.appendChild(el('p', 'project-pitch', r.description));
+        const meta = el('p', 'oss-meta', `★ ${r.stars.toLocaleString()}${r.language ? ` · ${r.language}` : ''}`);
+        card.appendChild(meta);
+        const actions = el('div', 'card-actions');
+        const issues = el('a', 'btn btn-primary btn-sm', 'Good first issues →');
+        issues.href = r.issuesUrl;
+        issues.target = '_blank';
+        issues.rel = 'noopener noreferrer';
+        actions.appendChild(issues);
+        const repo = el('a', 'btn btn-ghost btn-sm', 'View repo');
+        repo.href = r.url;
+        repo.target = '_blank';
+        repo.rel = 'noopener noreferrer';
+        actions.appendChild(repo);
+        card.appendChild(actions);
+        grid.appendChild(card);
+      }
+    } catch {
+      grid.replaceChildren(el('p', 'empty-note', 'Could not reach GitHub right now. Try again in a minute.'));
+    }
+  }
+
   // --- start-a-project modal ------------------------------------------------------
   const projectModal = document.getElementById('project-modal');
 
@@ -184,6 +229,7 @@
   document.getElementById('new-project-btn').addEventListener('click', openProjectModal);
   document.getElementById('cta-start').addEventListener('click', openProjectModal);
   document.getElementById('cta-browse').addEventListener('click', () => showView('projects', true));
+  document.getElementById('cta-learn').addEventListener('click', () => showView('learn', true));
 
   document.querySelectorAll('[data-close]').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -203,6 +249,7 @@
       pitch: document.getElementById('pf-pitch').value.trim(),
       founder: document.getElementById('pf-handle').value.trim(),
       tags: document.getElementById('pf-tags').value,
+      repo: document.getElementById('pf-repo').value.trim(),
     };
     try {
       const res = await fetch('/api/projects', {

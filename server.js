@@ -142,6 +142,7 @@ function publicProject(p) {
     tags: p.tags,
     upvotes: p.upvoters.length,
     createdAt: p.createdAt,
+    repo: p.repo || null,
   };
 }
 
@@ -179,12 +180,19 @@ app.post('/api/projects', (req, res) => {
     .filter(Boolean)
     .slice(0, MAX_TAGS);
 
+  // Optional GitHub repo link (open-source projects welcome contributors here)
+  let repo = cleanText(body.repo, 200);
+  if (repo && !/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/.test(repo)) {
+    return res.status(400).json({ error: 'repo must be a github.com/owner/name URL' });
+  }
+
   const project = {
     id: crypto.randomBytes(5).toString('hex'),
     name,
     pitch,
     founder,
     tags,
+    repo: repo || null,
     upvoters: [],
     createdAt: Date.now(),
     doc: '',
@@ -206,6 +214,49 @@ app.post('/api/projects/:id/upvote', (req, res) => {
   project.upvoters.push(handle);
   scheduleSave();
   res.json({ ok: true, upvotes: project.upvoters.length });
+});
+
+// --- GitHub open-source discovery (30 min cache) ----------------------------
+// Real repos actively looking for new contributors (good first issues).
+
+const ossCache = { at: 0, repos: null, pending: null };
+
+async function fetchOpenSource() {
+  const q = encodeURIComponent('good-first-issues:>3 stars:>300 archived:false');
+  const url = `https://api.github.com/search/repositories?q=${q}&sort=stars&order=desc&per_page=24`;
+  const res = await fetch(url, {
+    headers: { 'user-agent': 'cohort-app', accept: 'application/vnd.github+json' },
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error(`GitHub HTTP ${res.status}`);
+  const body = await res.json();
+  return (body.items || []).map((r) => ({
+    name: r.full_name,
+    description: r.description || '',
+    stars: r.stargazers_count,
+    language: r.language,
+    url: r.html_url,
+    issuesUrl: `${r.html_url}/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22`,
+  }));
+}
+
+app.get('/api/opensource', async (req, res) => {
+  if (ossCache.repos && Date.now() - ossCache.at < 30 * 60 * 1000) {
+    return res.json(ossCache.repos);
+  }
+  try {
+    if (!ossCache.pending) {
+      ossCache.pending = fetchOpenSource().finally(() => { ossCache.pending = null; });
+    }
+    const repos = await ossCache.pending;
+    ossCache.repos = repos;
+    ossCache.at = Date.now();
+    res.json(repos);
+  } catch (err) {
+    console.error('GitHub fetch error:', err.message);
+    if (ossCache.repos) return res.json(ossCache.repos);
+    res.status(502).json({ error: 'Could not reach GitHub right now' });
+  }
 });
 
 // --- Hacker News proxy (10 min cache) --------------------------------------
