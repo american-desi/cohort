@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cohort — Find your cohort. Build your company.</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/#home"><span class="brand-dot"></span>Cohort</a>
+      <div class="nav-tabs">
+        <button class="nav-tab" data-view="home">Home</button>
+        <button class="nav-tab" data-view="projects">Projects</button>
+        <button class="nav-tab" data-view="leaderboard">Leaderboard</button>
+        <button class="nav-tab" data-view="news">News</button>
+      </div>
+      <div class="nav-spacer"></div>
+      <button class="btn btn-ghost btn-sm" id="ai-settings-btn">⚙ AI Settings</button>
+      <button class="nav-handle" id="nav-handle" title="Change your handle">…</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Home / Landing -->
+    <section class="view" id="view-home">
+      <div class="hero">
+        <span class="hero-badge">Open source · community driven</span>
+        <h1>Cohort</h1>
+        <p class="tagline">Find your cohort. Build your company.</p>
+        <p class="subline">
+          The open-source, community-driven online Y Combinator: meet builders
+          around the world, start something together, and ship it with AI at
+          your side.
+        </p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" id="cta-start">Start a project</button>
+          <button class="btn btn-ghost" id="cta-browse">Browse projects</button>
+        </div>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>🛠 Build together</h3>
+          <p>
+            Every project gets a real-time shared workspace and group chat.
+            Sketch the plan, draft the spec and ship — together, live, from
+            anywhere on earth.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>🤖 AI co-builder</h3>
+          <p>
+            Plug in your own AI key (Gemini, Groq, OpenRouter, Anthropic or any
+            compatible API) and prompt it with your cofounders, right inside
+            the team chat.
+          </p>
+        </div>
+        <div class="feature-card">
+          <h3>🌍 Community</h3>
+          <p>
+            Upvote the projects you believe in, climb the leaderboard, and stay
+            sharp with a live Hacker News feed built into the platform.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="view" id="view-projects">
+      <div class="view-head">
+        <div>
+          <h2>Projects</h2>
+          <p class="view-sub">Find a team to join, or start your own.</p>
+        </div>
+        <button class="btn btn-primary" id="new-project-btn">Start a project</button>
+      </div>
+      <div class="project-grid" id="project-grid"></div>
+    </section>
+
+    <!-- Leaderboard -->
+    <section class="view" id="view-leaderboard">
+      <div class="view-head">
+        <div>
+          <h2>🏆 Leaderboard</h2>
+          <p class="view-sub">The community's most-backed projects.</p>
+        </div>
+      </div>
+      <div class="board" id="board"></div>
+    </section>
+
+    <!-- News -->
+    <section class="view" id="view-news">
+      <div class="view-head">
+        <div>
+          <h2>News</h2>
+          <p class="view-sub">Top 30 on Hacker News right now — refreshed every 10 minutes.</p>
+        </div>
+      </div>
+      <div class="news-list" id="news-list"></div>
+    </section>
+  </main>
+
+  <!-- Start a project modal -->
+  <div class="modal-backdrop" id="project-modal">
+    <div class="modal">
+      <h2>Start a project</h2>
+      <p class="modal-sub">Pitch it in one breath. You can refine everything later in the workspace.</p>
+      <form id="project-form">
+        <div class="field">
+          <label for="pf-name">Project name</label>
+          <input id="pf-name" maxlength="60" required placeholder="e.g. VerdantQuery" />
+        </div>
+        <div class="field">
+          <label for="pf-pitch">Pitch</label>
+          <textarea id="pf-pitch" maxlength="400" required
+            placeholder="What are you building, for whom, and why now?"></textarea>
+        </div>
+        <div class="field">
+          <label for="pf-handle">Your handle</label>
+          <input id="pf-handle" maxlength="40" required placeholder="e.g. ada_l" />
+        </div>
+        <div class="field">
+          <label for="pf-tags">Looking for (comma-separated)</label>
+          <input id="pf-tags" placeholder="e.g. backend engineer, designer, growth" />
+        </div>
+        <p class="form-error" id="pf-error"></p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close="project-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/common.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

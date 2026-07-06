@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workspace — Cohort</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner wide">
+      <a class="brand" href="/"><span class="brand-dot"></span>Cohort</a>
+      <a href="/#projects" class="nav-tab" style="text-decoration:none">← All projects</a>
+      <div class="nav-spacer"></div>
+      <button class="btn btn-ghost btn-sm" id="ai-settings-btn">⚙ AI Settings</button>
+      <button class="nav-handle" id="nav-handle" title="Change your handle">…</button>
+    </div>
+  </nav>
+
+  <div class="ws-layout">
+    <!-- Left: project info -->
+    <aside class="ws-panel ws-side" id="ws-side">
+      <div>
+        <h2 id="ws-name">Loading…</h2>
+        <p class="project-founder" id="ws-founder"></p>
+      </div>
+      <p class="project-pitch" id="ws-pitch"></p>
+      <div>
+        <p class="ws-side-label">Looking for</p>
+        <div class="tag-row" id="ws-tags"></div>
+      </div>
+      <div>
+        <p class="ws-side-label">Online now</p>
+        <div class="member-list" id="ws-members"></div>
+      </div>
+      <div>
+        <p class="ws-side-label">Backing</p>
+        <button class="upvote-btn" id="ws-upvote">▲ <span id="ws-upvote-count">0</span></button>
+      </div>
+    </aside>
+
+    <!-- Center: shared editor -->
+    <section class="ws-panel">
+      <div class="ws-panel-head">Shared workspace — everyone edits live</div>
+      <textarea class="ws-editor" id="ws-editor" spellcheck="false"
+        placeholder="Plan, spec, code, notes — everything here is synced live with your team."></textarea>
+      <div class="ws-status">
+        <span id="ws-conn"><span class="status-dot off">●</span> connecting…</span>
+        <span id="ws-doc-status"></span>
+      </div>
+    </section>
+
+    <!-- Right: group chat -->
+    <section class="ws-panel">
+      <div class="ws-panel-head">💬 Group chat</div>
+      <div class="chat-list" id="chat-list"></div>
+      <p class="chat-hint">Start a message with <strong>@ai</strong> to ask the AI co-builder.</p>
+      <form class="chat-form" id="chat-form">
+        <input id="chat-input" maxlength="2000" autocomplete="off"
+          placeholder="Message the team, or @ai …" />
+        <button type="submit" class="btn btn-primary btn-sm">Send</button>
+      </form>
+    </section>
+  </div>
+
+  <script src="/common.js"></script>
+  <script src="/workspace.js"></script>
+</body>
+</html>

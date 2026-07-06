@@ -1,0 +1,17 @@
+{
+  "name": "cohort",
+  "version": "0.1.0",
+  "description": "The open-source, community-driven online Y Combinator — meet builders, form teams, and ship startups together with AI as a co-builder.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}
